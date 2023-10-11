@@ -14,8 +14,11 @@ app.get('/', (request: Request, response: Response) => {
 app.post('/createUser', UserController.createUser)
 app.post('/createPost', PostController.createPost)
 app.get('/listPosts/:id', PostController.listPosts)
+app.get('/listUsers', UserController.listUsers)
+app.get('/listUsers/:id', UserController.listUsersId)
 app.put('/updatePost', PostController.updatePost)
 app.delete('/deletePost/:id', PostController.deletePost)
+app.delete('/deleteUser/:id', UserController.deleteUser)
 
 app.listen(8000, () => {
   console.log('Server is listening on port 8000!');
