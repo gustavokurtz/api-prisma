@@ -17,6 +17,7 @@ app.get('/listPosts/:id', PostController.listPosts)
 app.get('/listUsers', UserController.listUsers)
 app.get('/listUsers/:id', UserController.listUsersId)
 app.put('/updatePost', PostController.updatePost)
+app.put('/updateUser/:id', UserController.updateUser)
 app.delete('/deletePost/:id', PostController.deletePost)
 app.delete('/deleteUser/:id', UserController.deleteUser)
 

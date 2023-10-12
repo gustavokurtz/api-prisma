@@ -84,5 +84,32 @@ export default {
         }
     },
 
+    async updateUser(request: Request, response: Response) {
+        try {
+        
+            const { id } = request.params;
+            const { name, email } = request.body;
+
+            const userExists = await prisma.user.findUnique({ where: { id: Number(id) }});
+
+            if(!userExists){
+                return response.status(400).json({ error: true, message: 'Erro: user não encontrado!' });
+            }
+
+            const user = await prisma.user.update({
+                where: { id: Number(id) },
+                data: { name, email },
+            });
+
+            return response.json({ 
+                error: false, message: 'Sucesso: user editado com sucesso!', user 
+            });
+
+        } catch (error: any) {
+            return response.json({ message: error.message });
+        }
+
+    }
+
     
 }
