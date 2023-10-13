@@ -18,23 +18,45 @@ export default {
         }
     },
 
-    async listPosts(request: Request, response: Response) {
+    async listPostsId(request: Request, response: Response) {
         try {
-
-            const { id } = request.params;
-
-            const post = await prisma.post.findUnique({ where: { id: Number(id) }});
-
-            if(!post){
-                return response.status(400).json({ error: true, message: 'Erro: Post não encontrado!' });
-            }
-
-            return response.json({ error: false, message: 'Sucesso: Posts listados com sucesso!', post });
-            
+          const { id } = request.params;
+      
+          const post = await prisma.post.findUnique({
+            include: {
+              author: true, // Inclua o usuário que criou o post
+            },
+            where: { id: Number(id) },
+          });
+      
+          if (!post) {
+            return response.status(400).json({ error: true, message: 'Erro: Post não encontrado!' });
+          }
+      
+          return response.json({ error: false, message: 'Sucesso: Posts listados com sucesso!', post });
         } catch (error: any) {
-            return response.json({ message: error.message });
+          return response.json({ message: error.message });
         }
-    },
+      },
+
+
+      async listPosts(request: Request, response: Response) {
+        
+        try {
+            
+           const posts = await prisma.post.findMany({
+                include: {
+                    author: true, // Inclua o usuário que criou o post
+                }
+           }) 
+           return response.json({ error: false, posts });
+
+        } catch (error: any) {
+            return response.json({ message: error.message }); 
+        }
+      },
+
+    
 
     async updatePost(request: Request, response: Response) {
         try {

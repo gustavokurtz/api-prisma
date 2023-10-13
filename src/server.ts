@@ -13,7 +13,8 @@ app.get('/', (request: Request, response: Response) => {
 
 app.post('/createUser', UserController.createUser)
 app.post('/createPost', PostController.createPost)
-app.get('/listPosts/:id', PostController.listPosts)
+app.get('/listPosts/:id', PostController.listPostsId)
+app.get('/listPosts', PostController.listPosts)
 app.get('/listUsers', UserController.listUsers)
 app.get('/listUsers/:id', UserController.listUsersId)
 app.put('/updatePost', PostController.updatePost)
