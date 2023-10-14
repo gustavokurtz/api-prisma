@@ -48,7 +48,15 @@ export default {
 
             const { id } = request.params;
 
-            const user = await prisma.user.findUnique({ where: { id: Number(id) }});
+            const user = await prisma.user.findUnique({
+                 where: { id: Number(id) },
+                include:{
+                    Post: true, // Inclua os posts relacionados a cada usuário
+                    Likes: true, // Inclua os likes relacionados a cada usuário
+                    Comment: true, // Inclua os comentários relacionados a cada post
+                    About: true, // Inclua os comentários relacionados a cada post
+                }
+                });
 
             if(!user){
                 return response.status(400).json({ error: true, message: 'Erro: user não encontrado!' });
