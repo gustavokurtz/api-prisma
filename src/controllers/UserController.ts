@@ -80,7 +80,7 @@ export default {
             });
             
         } catch (error: any) {
-            return response.json({ message: error.message });
+            return response.status(400).json({ message: 'Algo inesperado aconteceu, verifique se você tem posts pendentes e exclua antes de excluir seu usuário!' });
         }
     },
 
