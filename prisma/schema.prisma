@@ -12,6 +12,7 @@ model user {
   name  String?
   email String  @unique
   Post  Post[]
+  Likes Likes[]
 
   @@map("users")
 }
@@ -22,6 +23,18 @@ model Post {
   content String  @db.VarChar(255)
   userId  Int
   author  user    @relation(fields: [userId], references: [id])
+  Likes   Likes[]
 
   @@map("posts")
+}
+
+model Likes {
+  id       Int  @id @default(autoincrement())
+  userId   Int
+  postId   Int
+  curtidas Int
+  user     user @relation(fields: [userId], references: [id])
+  post     Post @relation(fields: [postId], references: [id])
+
+  @@map("likes")
 }

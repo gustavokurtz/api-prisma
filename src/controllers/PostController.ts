@@ -25,6 +25,7 @@ export default {
           const post = await prisma.post.findUnique({
             include: {
               author: true, // Inclua o usuário que criou o post
+              Likes: true, // Inclua os likes relacionados a cada post
             },
             where: { id: Number(id) },
           });
@@ -47,6 +48,7 @@ export default {
            const posts = await prisma.post.findMany({
                 include: {
                     author: true, // Inclua o usuário que criou o post
+                    Likes: true, // Inclua os likes relacionados a cada post
                 }
            }) 
            return response.json({ error: false, posts });

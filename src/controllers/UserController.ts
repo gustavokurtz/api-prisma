@@ -22,7 +22,7 @@ export default {
             return response.json({ error: false, message: 'Sucesso: Usuário cadastrado com sucesso!', user });
             
         } catch (error: any) {
-            return response.json({ message: error.message });
+            return response.json({ message: 'Algo inesperado aconteceu' });
         }
     },
 
@@ -30,13 +30,14 @@ export default {
         try {
             const users = await prisma.user.findMany({
                 include: {
-                    Post: true // Inclua os posts relacionados a cada usuário
+                    Post: true, // Inclua os posts relacionados a cada usuário
+                    Likes: true, // Inclua os likes relacionados a cada usuário
                 }
             });
     
             return response.json({ error: false, users });
         } catch (error: any) {
-            return response.json({ message: error.message });
+            return response.json({ message: 'Algo inesperado aconteceu' });
         }
     },
     
@@ -54,7 +55,7 @@ export default {
             return response.json({ error: false, message: 'Sucesso: users listados com sucesso!', user });
             
         } catch (error: any) {
-            return response.json({ message: error.message });
+            return response.json({ message: 'Algo inesperado aconteceu' });
         }
     },
 
@@ -106,7 +107,7 @@ export default {
             });
 
         } catch (error: any) {
-            return response.json({ message: error.message });
+            return response.json({ message: 'Algo inesperado aconteceu' });
         }
 
     }
