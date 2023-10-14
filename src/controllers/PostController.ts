@@ -26,6 +26,7 @@ export default {
             include: {
               author: true, // Inclua o usuário que criou o post
               Likes: true, // Inclua os likes relacionados a cada post
+              Comment: true, // Inclua os comentários relacionados a cada post
             },
             where: { id: Number(id) },
           });
@@ -49,6 +50,8 @@ export default {
                 include: {
                     author: true, // Inclua o usuário que criou o post
                     Likes: true, // Inclua os likes relacionados a cada post
+                    Comment: true, // Inclua os comentários relacionados a cada post
+                    
                 }
            }) 
            return response.json({ error: false, posts });

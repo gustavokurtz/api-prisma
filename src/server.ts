@@ -2,7 +2,8 @@ import express, { Request, Response } from 'express';
 import UserController from './controllers/UserController';
 import PostController from './controllers/PostController';
 import LikeController from './controllers/LikeController';
-
+import CommentController from './controllers/CommentController';
+import AboutController from './controllers/AboutController';
 
 const app = express();
 
@@ -16,6 +17,8 @@ app.get('/', (request: Request, response: Response) => {
 app.post('/createUser', UserController.createUser)
 app.post('/createPost', PostController.createPost)
 app.post('/createLike', LikeController.createLike)
+app.post('/createComment', CommentController.createComment)
+app.post('/createAbout', AboutController.createAbout)
 
 // rotas de listagem
 app.get('/listPosts/:id', PostController.listPostsId)
@@ -30,6 +33,7 @@ app.put('/updateUser/:id', UserController.updateUser)
 // rotas de delete
 app.delete('/deletePost/:id', PostController.deletePost)
 app.delete('/deleteUser/:id', UserController.deleteUser)
+app.delete('/deleteAbout/:id', AboutController.deleteAbout)
 
 app.listen(8000, () => {
   console.log('Server is listening on port 8000!');

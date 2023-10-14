@@ -32,6 +32,8 @@ export default {
                 include: {
                     Post: true, // Inclua os posts relacionados a cada usuário
                     Likes: true, // Inclua os likes relacionados a cada usuário
+                    Comment: true, // Inclua os comentários relacionados a cada post
+                    About: true, // Inclua os comentários relacionados a cada post
                 }
             });
     
