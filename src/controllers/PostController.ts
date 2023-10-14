@@ -14,7 +14,7 @@ export default {
             return response.json({ error: false, message: 'Sucesso: Post cadastrado com sucesso!', post });
             
         } catch (error: any) {
-            return response.json({ message: error.message });
+            return response.json({ message: 'Algo inesperado aconteceu' });
         }
     },
 
@@ -35,7 +35,7 @@ export default {
       
           return response.json({ error: false, message: 'Sucesso: Posts listados com sucesso!', post });
         } catch (error: any) {
-          return response.json({ message: error.message });
+          return response.json({ message: 'Algo inesperado aconteceu' });
         }
       },
 
@@ -52,7 +52,7 @@ export default {
            return response.json({ error: false, posts });
 
         } catch (error: any) {
-            return response.json({ message: error.message }); 
+            return response.json({ message: 'Algo inesperado aconteceu' }); 
         }
       },
 
@@ -79,7 +79,7 @@ export default {
             });
             
         } catch (error: any) {
-            return response.json({ message: error.message });
+            return response.json({ message: 'Algo inesperado aconteceu' });
         }
     },
 
@@ -106,7 +106,7 @@ export default {
             });
             
         } catch (error: any) {
-            return response.json({ message: error.message });
+            return response.json({ message: 'Algo inesperado aconteceu' });
         }
     },
     
