@@ -34,6 +34,8 @@ app.put('/updateUser/:id', UserController.updateUser)
 app.delete('/deletePost/:id', PostController.deletePost)
 app.delete('/deleteUser/:id', UserController.deleteUser)
 app.delete('/deleteAbout/:id', AboutController.deleteAbout)
+app.delete('/deleteComment/:id', CommentController.deleteComment)
+app.delete('/deleteLike/:id', LikeController.deleteLike)
 
 app.listen(8000, () => {
   console.log('Server is listening on port 8000!');

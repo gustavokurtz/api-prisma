@@ -16,5 +16,21 @@ export default {
         return response.status(400).json({ message: 'Algo inesperado aconteceu' });
     }
         
+    },
+
+
+  async deleteLike(request: Request, response: Response) {
+
+    try {
+        const { id } = request.params;
+
+        await prisma.likes.delete({ where: { id: Number(id) } });
+
+        return response.json({ error: false, message: 'Sucesso: Like deletado com sucesso!' });
+
+    } catch (error: any) {
+        return response.status(400).json({ message: 'Algo inesperado aconteceu!' });
     }
+
+  }  
 }

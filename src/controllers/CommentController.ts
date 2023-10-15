@@ -16,5 +16,22 @@ export default {
             return response.status(400).json({ message: 'Algo inesperado aconteceu!' });
         }
     
+    },
+
+    async deleteComment(request: Request, response: Response) {
+        try {
+            
+            const  { id } = request.params;
+
+            await prisma.comment.delete({ where: { id: Number(id) } });
+
+            return response.json({ error: false, message: 'Sucesso: Comentário deletado com sucesso!' });
+            
+
+
+        } catch (error: any) {
+            return response.status(400).json({ message: 'Algo inesperado aconteceu!' });
+        }   
     }
+
 }
