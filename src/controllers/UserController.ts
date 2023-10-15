@@ -8,7 +8,7 @@ export default {
         try {
 
             const {id} = request.params;
-            const { name, email } = request.body;
+            const { name, email, password } = request.body;
 
 
             const userExist = await prisma.user.findUnique({ where: { email } });
@@ -17,7 +17,7 @@ export default {
                 return response.status(400).json({ error: true, message: 'Usuário já existe!' });
             }
 
-            const user = await prisma.user.create({ data: { name, email } });
+            const user = await prisma.user.create({ data: { name, email, password } });
 
             return response.json({ error: false, message: 'Sucesso: Usuário cadastrado com sucesso!', user });
             
@@ -71,29 +71,44 @@ export default {
 
     async deleteUser(request: Request, response: Response) {
         try {
+      
+          const { id } = request.params;
+      
+          const userExists = await prisma.user.findUnique({ where: { id: Number(id) } });
+      
+          if (!userExists) {
+            return response.status(400).json({ error: true, message: 'Erro: user não encontrado!' });
+          }
+      
 
-            const { id } = request.params;
+          await prisma.about.deleteMany({ where: { userId: Number(id) } });
 
-            const userExists = await prisma.user.findUnique({ where: { id: Number(id) }});
+            await prisma.likes.deleteMany({ where: { userId: Number(id) } });
 
-            if(!userExists){
-                return response.status(400).json({ error: true, message: 'Erro: user não encontrado!' });
-            }
+            await prisma.comment.deleteMany({ where: { userId: Number(id) } });
 
+            await prisma.post.deleteMany({ where: { userId: Number(id) } });
 
-            const user = await prisma.user.delete({ 
-                where: { id: Number(request.params.id) },});
-
-
-
-            return response.json({ 
-                error: false, message: 'Sucesso: user deletado com sucesso!', user 
-            });
             
+
+          // Exclui todos os posts do usuário
+          await prisma.post.deleteMany({ where: { userId: Number(id) } });
+      
+          // Exclui o usuário
+          const user = await prisma.user.delete({
+            where: { id: Number(request.params.id) },
+          });
+      
+          return response.json({
+            error: false,
+            message: 'Sucesso: user deletado com sucesso!',
+            user,
+          });
+      
         } catch (error: any) {
-            return response.status(400).json({ message: 'Algo inesperado aconteceu, verifique se você tem posts pendentes e exclua antes de excluir seu usuário!' });
+          return response.status(400).json({ message: error.message });
         }
-    },
+      },
 
     async updateUser(request: Request, response: Response) {
         try {

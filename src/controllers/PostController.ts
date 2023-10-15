@@ -91,29 +91,26 @@ export default {
 
     async deletePost(request: Request, response: Response) {
         try {
-
-            const { id } = request.params;
-
-            const postExists = await prisma.post.findUnique({ where: { id: Number(id) }});
-
-            if(!postExists){
-                return response.status(400).json({ error: true, message: 'Erro: Post não encontrado!' });
-            }
-
-
-            const post = await prisma.post.delete({ 
-                where: { id: Number(request.params.id) },});
-
-
-
-            return response.json({ 
-                error: false, message: 'Sucesso: Post deletado com sucesso!', post 
-            });
-            
+          const { id } = request.params;
+      
+          const postExists = await prisma.post.findUnique({ where: { id: Number(id) }});
+      
+          if (!postExists) {
+            return response.status(400).json({ error: true, message: 'Erro: Post não encontrado!' });
+          }
+                
+      
+          // Finalmente, exclua o post em si
+          const deletedPost = await prisma.post.delete({ where: { id: Number(id) }});
+      
+          return response.json({ 
+            error: false, message: 'Sucesso: Post deletado com sucesso!', post: deletedPost,
+          });
+      
         } catch (error: any) {
-            return response.json({ message: 'Algo inesperado aconteceu' });
+          return response.json({ message: 'Algo inesperado aconteceu' });
         }
-    },
+      }
     
 
     
