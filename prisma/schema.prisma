@@ -8,7 +8,7 @@ datasource db {
 }
 
 model user {
-  id       Int       @id @default(autoincrement())
+  id       String    @id @default(uuid())
   name     String?
   email    String    @unique
   password String    @db.VarChar(255)
@@ -24,7 +24,7 @@ model Post {
   id      Int       @id @default(autoincrement())
   title   String?
   content String    @db.VarChar(255)
-  userId  Int
+  userId  String
   author  user      @relation(fields: [userId], references: [id])
   Likes   Likes[]
   Comment Comment[]
@@ -33,12 +33,12 @@ model Post {
 }
 
 model Likes {
-  id       Int  @id @default(autoincrement())
-  userId   Int
+  id       Int    @id @default(autoincrement())
+  userId   String
   postId   Int
   curtidas Int
-  user     user @relation(fields: [userId], references: [id])
-  post     Post @relation(fields: [postId], references: [id])
+  user     user   @relation(fields: [userId], references: [id])
+  post     Post   @relation(fields: [postId], references: [id])
 
   @@map("likes")
 }
@@ -46,7 +46,7 @@ model Likes {
 model Comment {
   id      Int    @id @default(autoincrement())
   content String
-  userId  Int
+  userId  String
   postId  Int
   user    user   @relation(fields: [userId], references: [id])
   post    Post   @relation(fields: [postId], references: [id])
@@ -56,7 +56,7 @@ model Comment {
 
 model About {
   id     Int    @id @default(autoincrement())
-  userId Int
+  userId String
   city   String
   hobby  String
   state  String

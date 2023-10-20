@@ -49,7 +49,7 @@ export default {
             const { id } = request.params;
 
             const user = await prisma.user.findUnique({
-                 where: { id: Number(id) },
+                 where: { id: String(id) },
                 include:{
                     Post: true, // Inclua os posts relacionados a cada usuário
                     Likes: true, // Inclua os likes relacionados a cada usuário
@@ -74,29 +74,27 @@ export default {
       
           const { id } = request.params;
       
-          const userExists = await prisma.user.findUnique({ where: { id: Number(id) } });
+          const userExists = await prisma.user.findUnique({ where: { id: String(id) } });
       
           if (!userExists) {
             return response.status(400).json({ error: true, message: 'Erro: user não encontrado!' });
           }
       
 
-          await prisma.about.deleteMany({ where: { userId: Number(id) } });
+          await prisma.about.deleteMany({ where: { userId: String(id) } });
 
-            await prisma.likes.deleteMany({ where: { userId: Number(id) } });
+          await prisma.likes.deleteMany({ where: { userId: String(id) } });
 
-            await prisma.comment.deleteMany({ where: { userId: Number(id) } });
+          await prisma.comment.deleteMany({ where: { userId: String(id) } });
 
-            await prisma.post.deleteMany({ where: { userId: Number(id) } });
-
-            
+          await prisma.post.deleteMany({ where: { userId: String(id) } });
 
           // Exclui todos os posts do usuário
-          await prisma.post.deleteMany({ where: { userId: Number(id) } });
+          await prisma.post.deleteMany({ where: { userId: String(id) } });
       
           // Exclui o usuário
           const user = await prisma.user.delete({
-            where: { id: Number(request.params.id) },
+            where: { id: String(request.params.id) },
           });
       
           return response.json({
@@ -116,14 +114,14 @@ export default {
             const { id } = request.params;
             const { name, email } = request.body;
 
-            const userExists = await prisma.user.findUnique({ where: { id: Number(id) }});
+            const userExists = await prisma.user.findUnique({ where: { id: String(id) }});
 
             if(!userExists){
                 return response.status(400).json({ error: true, message: 'Erro: user não encontrado!' });
             }
 
             const user = await prisma.user.update({
-                where: { id: Number(id) },
+                where: { id: String(id) },
                 data: { name, email },
             });
 
