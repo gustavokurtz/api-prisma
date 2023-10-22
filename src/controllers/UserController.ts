@@ -7,7 +7,6 @@ export default {
     async createUser(request: Request, response: Response) {
         try {
 
-            const {id} = request.params;
             const { name, email, password } = request.body;
 
 
@@ -89,8 +88,6 @@ export default {
 
           await prisma.post.deleteMany({ where: { userId: String(id) } });
 
-          // Exclui todos os posts do usuário
-          await prisma.post.deleteMany({ where: { userId: String(id) } });
       
           // Exclui o usuário
           const user = await prisma.user.delete({
