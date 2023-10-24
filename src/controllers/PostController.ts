@@ -1,24 +1,24 @@
 import { Request, Response } from "express";
 import { prisma } from "../database";
-
+import { Post } from '@prisma/client'
 
 export default {
     
-    async createPost(request: Request, response: Response) {
+    async createPost(request: Request, response: Response): Promise<Response<Post, Record<string, any>>> {
         try {
             const { title, content, userId } = request.body;
             
 
             const post = await prisma.post.create({ data: { title, content, userId } });
 
-            return response.json({ error: false, message: 'Sucesso: Post cadastrado com sucesso!', post });
+            return response.status(201).json({ error: false, message: 'Sucesso: Post cadastrado com sucesso!', post });
             
-        } catch (error: any) {
+        } catch (error) {
             return response.json({ message: 'Algo inesperado aconteceu' });
         }
     },
 
-    async listPostsId(request: Request, response: Response) {
+    async listPostsId(request: Request, response: Response): Promise<Response<Post, Record<string, any>>> {
         try {
           const { id } = request.params;
       
@@ -36,13 +36,13 @@ export default {
           }
       
           return response.json({ error: false, message: 'Sucesso: Posts listados com sucesso!', post });
-        } catch (error: any) {
+        } catch (error) {
           return response.json({ message: 'Algo inesperado aconteceu' });
         }
       },
 
 
-      async listPosts(request: Request, response: Response) {
+      async listPosts(request: Request, response: Response): Promise<Response<Post, Record<string, any>>> {
         
         try {
             
@@ -56,14 +56,14 @@ export default {
            }) 
            return response.json({ error: false, posts });
 
-        } catch (error: any) {
+        } catch (error) {
             return response.json({ message: 'Algo inesperado aconteceu' }); 
         }
       },
 
     
 
-    async updatePost(request: Request, response: Response) {
+    async updatePost(request: Request, response: Response): Promise<Response<Post, Record<string, any>>> {
         try {
 
             const { id, title, content } = request.body;
@@ -83,13 +83,13 @@ export default {
                 error: false, message: 'Sucesso: Post atualizado com sucesso!', post 
             });
             
-        } catch (error: any) {
+        } catch (error) {
             return response.json({ message: 'Algo inesperado aconteceu' });
         }
     },
 
 
-    async deletePost(request: Request, response: Response) {
+    async deletePost(request: Request, response: Response): Promise<Response<Post, Record<string, any>>> {
         try {
           const { id } = request.params;
       
@@ -103,11 +103,9 @@ export default {
           // Finalmente, exclua o post em si
           const deletedPost = await prisma.post.delete({ where: { id: Number(id) }});
       
-          return response.json({ 
-            error: false, message: 'Sucesso: Post deletado com sucesso!', post: deletedPost,
-          });
+          return response.status(204).json()
       
-        } catch (error: any) {
+        } catch (error) {
           return response.json({ message: 'Algo inesperado aconteceu' });
         }
       }

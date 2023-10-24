@@ -1,10 +1,12 @@
 import { Request, Response } from "express";
 import { prisma } from "../database";
+import { user } from '@prisma/client'
+
 
 
 export default {
     
-    async createUser(request: Request, response: Response) {
+    async createUser(request: Request, response: Response): Promise<Response<user, Record<string, any>>>  {
         try {
 
             const { name, email, password } = request.body;
@@ -18,14 +20,14 @@ export default {
 
             const user = await prisma.user.create({ data: { name, email, password } });
 
-            return response.json({ error: false, message: 'Sucesso: Usuário cadastrado com sucesso!', user });
+            return response.status(201).json({ error: false, message: 'Sucesso: Usuário cadastrado com sucesso!', user });
             
-        } catch (error: any) {
-            return response.json({ message: 'Algo inesperado aconteceu' });
+        } catch (error) {
+            return response.status(400).json({ message: 'Algo inesperado aconteceu' });
         }
     },
 
-    async listUsers(request: Request, response: Response) {
+    async listUsers(request: Request, response: Response): Promise<Response<user, Record<string, any>>> {
         try {
             const users = await prisma.user.findMany({
                 include: {
@@ -37,12 +39,12 @@ export default {
             });
     
             return response.json({ error: false, users });
-        } catch (error: any) {
+        } catch (error) {
             return response.json({ message: 'Algo inesperado aconteceu' });
         }
     },
     
-    async listUsersId(request: Request, response: Response) {
+    async listUsersId(request: Request, response: Response): Promise<Response<user, Record<string, any>>> {
         try {
 
             const { id } = request.params;
@@ -63,12 +65,12 @@ export default {
 
             return response.json({ error: false, message: 'Sucesso: users listados com sucesso!', user });
             
-        } catch (error: any) {
+        } catch (error) {
             return response.json({ message: 'Algo inesperado aconteceu' });
         }
     },
 
-    async deleteUser(request: Request, response: Response) {
+    async deleteUser(request: Request, response: Response): Promise<Response<user, Record<string, any>>> {
         try {
       
           const { id } = request.params;
@@ -94,18 +96,14 @@ export default {
             where: { id: String(request.params.id) },
           });
       
-          return response.json({
-            error: false,
-            message: 'Sucesso: user deletado com sucesso!',
-            user,
-          });
+          return response.status(204).json()
       
-        } catch (error: any) {
-          return response.status(400).json({ message: error.message });
+        } catch (error) {
+          return response.status(400).json({ message: "User não encontrado!" });
         }
       },
 
-    async updateUser(request: Request, response: Response) {
+    async updateUser(request: Request, response: Response): Promise<Response<user, Record<string, any>>> {
         try {
         
             const { id } = request.params;
@@ -126,7 +124,7 @@ export default {
                 error: false, message: 'Sucesso: user editado com sucesso!', user 
             });
 
-        } catch (error: any) {
+        } catch (error) {
             return response.json({ message: 'Algo inesperado aconteceu' });
         }
 
