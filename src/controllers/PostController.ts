@@ -127,6 +127,7 @@ export default {
             }
 
             // Finalmente, exclua o post em si
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
             const deletedPost = await prisma.post.delete({
                 where: { id: Number(id) },
             });

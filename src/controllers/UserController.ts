@@ -117,6 +117,7 @@ export default {
             await prisma.post.deleteMany({ where: { userId: String(id) } });
 
             // Exclui o usuário
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
             const user = await prisma.user.delete({
                 where: { id: String(request.params.id) },
             });

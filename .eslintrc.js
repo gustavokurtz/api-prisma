@@ -27,5 +27,6 @@ module.exports = {
     rules: {
         "no-console": "error",
         "react/no-unknown-property": ["error", { ignore: ["jsx", "global"] }],
+        "@typescript-eslint/no-explicit-any": "off",
     },
 };
