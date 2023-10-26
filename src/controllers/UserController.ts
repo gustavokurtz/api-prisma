@@ -1,6 +1,8 @@
 import { Request, Response } from "express";
 import { prisma } from "../database";
+import jwt from "jsonwebtoken";
 import { user } from "@prisma/client";
+import bcrypt from "bcrypt";
 
 export default {
     async createUser(
@@ -10,18 +12,11 @@ export default {
         try {
             const { name, email, password } = request.body;
 
-            const userExist = await prisma.user.findUnique({
-                where: { email },
-            });
-
-            if (userExist) {
-                return response
-                    .status(400)
-                    .json({ error: true, message: "Usuário já existe!" });
-            }
+            // Criptografar a senha antes de armazená-la
+            const hashedPassword = await bcrypt.hash(password, 10);
 
             const user = await prisma.user.create({
-                data: { name, email, password },
+                data: { name, email, password: hashedPassword },
             });
 
             return response.status(201).json({
@@ -29,6 +24,123 @@ export default {
                 message: "Sucesso: Usuário cadastrado com sucesso!",
                 user,
             });
+        } catch (error) {
+            return response
+                .status(400)
+                .json({ message: "Algo inesperado aconteceu" });
+        }
+    },
+
+    async login(
+        request: Request,
+        response: Response
+    ): Promise<Response<user, Record<string, any>>> {
+        try {
+            const { email, password } = request.body;
+
+            // Buscar usuário no banco de dados
+            const user = await prisma.user.findUnique({
+                where: { email },
+            });
+
+            if (!user) {
+                return response
+                    .status(400)
+                    .json({ message: "Usuário não encontrado" });
+            }
+
+            // Comparar a senha fornecida com a senha do usuário
+            const isValidPassword = await bcrypt.compare(
+                password,
+                user.password
+            );
+
+            if (!isValidPassword) {
+                return response.status(400).json({ message: "Senha inválida" });
+            }
+
+            const token = jwt.sign(
+                { userId: user.id },
+                "a3Z9#Kl$29!sDl2@0%^78Gh13*612#",
+                {
+                    expiresIn: "1h",
+                }
+            );
+
+            // Se a senha for válida, o usuário será autenticado
+            return response.status(200).json({
+                error: false,
+                message: "Sucesso: Usuário autenticado com sucesso!",
+                user,
+                token,
+            });
+        } catch (error) {
+            return response
+                .status(400)
+                .json({ message: "Algo inesperado aconteceu" });
+        }
+    },
+
+    async getLoggedInUsers(
+        request: Request,
+        response: Response
+    ): Promise<Response> {
+        try {
+            // Verificar o token JWT fornecido na requisição
+            const authHeader = request.headers.authorization;
+
+            if (!authHeader) {
+                return response
+                    .status(401)
+                    .json({ message: "Token não fornecido" });
+            }
+
+            const [, token] = authHeader.split(" ");
+
+            try {
+                const decoded = jwt.verify(
+                    token,
+                    "a3Z9#Kl$29!sDl2@0%^78Gh13*612#"
+                ) as { userId: string };
+
+                // O token é válido, buscar o usuário correspondente
+                const user = await prisma.user.findUnique({
+                    where: { id: decoded.userId },
+                });
+
+                if (!user) {
+                    return response
+                        .status(404)
+                        .json({ message: "Usuário não encontrado" });
+                }
+
+                // Retornar o usuário
+                return response.status(200).json(user);
+            } catch {
+                return response.status(401).json({ message: "Token inválido" });
+            }
+        } catch (error) {
+            return response
+                .status(400)
+                .json({ message: "Algo inesperado aconteceu" });
+        }
+    },
+
+    async listUsersLogin(
+        request: Request,
+        response: Response
+    ): Promise<Response<user, Record<string, any>>> {
+        try {
+            const users = await prisma.user.findMany({
+                include: {
+                    Post: true, // Inclua os posts relacionados a cada usuário
+                    Likes: true, // Inclua os likes relacionados a cada usuário
+                    Comment: true, // Inclua os comentários relacionados a cada post
+                    About: true, // Inclua os comentários relacionados a cada post
+                },
+            });
+
+            return response.status(200).json({ error: false, users });
         } catch (error) {
             return response
                 .status(400)

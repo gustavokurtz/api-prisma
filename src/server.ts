@@ -19,12 +19,14 @@ app.post("/createPost", PostController.createPost);
 app.post("/createLike", LikeController.createLike);
 app.post("/createComment", CommentController.createComment);
 app.post("/createAbout", AboutController.createAbout);
+app.post("/login", UserController.login);
 
 // rotas de listagem
 app.get("/listPosts/:id", PostController.listPostsId);
 app.get("/listPosts", PostController.listPosts);
 app.get("/listUsers", UserController.listUsers);
 app.get("/listUsers/:id", UserController.listUsersId);
+app.get("/listUsersLogin", UserController.getLoggedInUsers);
 
 // rotas de update
 app.put("/updatePost", PostController.updatePost);
@@ -38,5 +40,6 @@ app.delete("/deleteComment/:id", CommentController.deleteComment);
 app.delete("/deleteLike/:id", LikeController.deleteLike);
 
 app.listen(8000, () => {
+    // eslint-disable-next-line no-console
     console.log("Server is listening on port 8000!");
 });
