@@ -31,6 +31,7 @@ export default {
         }
     },
 
+    // Bearer
     async login(
         request: Request,
         response: Response
