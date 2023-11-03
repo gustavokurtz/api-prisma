@@ -33,6 +33,7 @@ export default {
         try {
             const { id } = request.params;
 
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
             const about = await prisma.about.delete({
                 where: { id: Number(id) },
             });

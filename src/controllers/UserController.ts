@@ -163,7 +163,11 @@ export default {
                 },
             });
 
-            return response.json({ error: false, users });
+            return response.json({
+                error: false,
+                message: "Estes são os usuarios da plataforma!",
+                users,
+            });
         } catch (error) {
             return response.json({ message: "Algo inesperado aconteceu" });
         }
@@ -269,7 +273,7 @@ export default {
 
             return response.json({
                 error: false,
-                message: "Sucesso: user editado com sucesso!",
+                message: "Sucesso: user atualizado com sucesso!",
                 user,
             });
         } catch (error) {
